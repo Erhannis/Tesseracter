@@ -16,13 +16,27 @@ import javax.imageio.ImageIO;
 
 /**
  * https://puzzling.stackexchange.com/a/5817/30102
- * @author Victor
+ * @author Victor ( https://github.com/victorwss )
  */
 public class Tesseracter {
     public static void main(String[] args) throws IOException {
-        TesseractMaze maze = new TesseractMaze(10, 10, 10, 10);
+        int x = 3;
+        int y = 3;
+        int z = 3;
+        int w = 3;
+        if (args.length == 4) {
+            x = Integer.parseInt(args[0]);
+            y = Integer.parseInt(args[1]);
+            z = Integer.parseInt(args[2]);
+            w = Integer.parseInt(args[3]);
+        } else if (args.length != 0) {
+            System.out.println("java -jar Tesseracter.jar X Y Z W\nOutputs 4D maze to maze_X_Y_Z_W.png and maze.png");
+            return;
+        }
+        TesseractMaze maze = new TesseractMaze(w,x,y,z);
         BufferedImage im = maze.draw();
         ImageIO.write(im, "png", new File("maze.png"));
+        ImageIO.write(im, "png", new File("maze_"+x+"x"+y+"x"+z+"x"+w+".png"));
     }
 
     public static final class Coordinate4D {
@@ -128,15 +142,16 @@ public class Tesseracter {
         }
 
         public BufferedImage draw() {
-            int cellWidth = 16;
-            int cellHeight = 16;
+            int F = 2;
+            int cellWidth = 16*F;
+            int cellHeight = 16*F;
             int boardWidth = cellWidth * (xSize + 1);
             int boardHeight = cellHeight * (ySize + 1);
-            int arrowSize = 3;
-            int margin = 2;
+            int arrowSize = 3*F;
+            int margin = 2*F;
             Color red = Color.RED;
             Color blue = Color.BLUE;
-            Color yellow = new Color(128, 128, 0);
+            Color yellow = new Color(0, 0, 0);
             Color green = new Color(0, 128, 0);
             BufferedImage im = new BufferedImage(wSize * boardWidth + cellWidth - 1, zSize * boardHeight + cellHeight - 1, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = im.createGraphics();
